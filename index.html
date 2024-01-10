@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    body{
+      margin: 0px;
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      justify-content: center;
+      align-items: center;
+    }
+    .main-header{
+      margin-top: 20px;
+      margin-bottom: 0px;
+      text-align: center;
+      font-family: math;
+    }
+    .container{
+      height: 400px;
+      width: 300px;
+      background-color: rgb(225, 174, 238);
+      overflow: auto;
+    }
+    .header{
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .txt-box{
+      width: 70%;
+      height: 25px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .add-btn{
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    input{
+      border-radius: 5px;
+      border: none;
+      /* outline: none; */
+    }
+    .list-container{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-items: center;
+      padding: 0px 10px;
+      border: 1px solid black;
+      margin: 0px 5px;
+      border-radius: 5px;
+      background-color: #c849ff8f;
+      font-size: 20px;
+      font-family: system-ui;
+    }
+    .list{
+      margin: 5px 0px;
+    }
+    .icon-container span{
+      cursor: pointer;
+    }
+
+  </style>
+</head>  
+<body>
+  <div class="container">
+    <h1 class="main-header">To-Do List</h1>
+    <div class="header">
+      <input class="txt-box" type="text" id="txtVal">
+      <input class="add-btn" type="button" value="Add" id="addBtn">
+    </div>
+    <div class="list-of-data"></div>
+    <!-- <span class="material-symbols-outlined">delete</span>
+      <span class="material-symbols-outlined">edit</span> -->
+  </div>
+</body>
+<script>
+  
+  var addBtn = document.querySelector('#addBtn')
+  var listOfData = document.querySelector('.list-of-data'); 
+  var listNo = 1;
+
+  addBtn.addEventListener('click', function(){
+
+    var txtVal = document.querySelector('#txtVal').value;
+    
+
+    if(txtVal == ""){
+      return
+    }
+    else{
+      var node = document.createElement('p');
+      node.id = `list-${listNo}`;
+      node.classList.add("list");
+      node.innerHTML = `
+      <div class="list-container">
+        <span id="txtVal-${listNo}">${txtVal}</span>
+        <div class="icon-container">
+          <span class="material-symbols-outlined delete" onclick="deleteElem(this.parentElement.parentElement.parentElement.id)">delete</span>
+          <span class="material-symbols-outlined edit" id="val-${listNo}" onclick="editElem(this.parentElement.parentElement.parentElement.id)">edit</span>
+          <span class="material-symbols-outlined workDoneBox" id="ckb-${listNo}" onclick="workDone(this.parentElement.parentElement.parentElement.id, ${listNo})">priority</span>
+        </div>
+      </div>
+      
+      `;
+
+      listOfData.appendChild(node);
+      document.querySelector('#txtVal').value = '';
+      listNo++;
+      // document.querySelector('#txtVal').focus
+    }
+
+    
+    var deleteBtn = document.querySelector('.delete');
+    console.log(deleteBtn);
+  });
+  
+  function deleteElem(parentIdName){
+    var deletableElem = document.querySelector(`#${parentIdName}`);
+    console.log(deletableElem);
+    listOfData.removeChild(deletableElem);
+  }
+
+  function editElem(parentIdName){
+    var newVal = window.prompt('Enter new value :--');
+    console.log(newVal);
+    var editableElem = document.querySelector(`#${parentIdName}`);
+    editableElem.querySelector('span').innerHTML = newVal;
+  }
+
+  function workDone(parentIdName, listNo){  
+    var editableElem = document.querySelector(`#${parentIdName}`);
+    var spanElem = editableElem.querySelector(`#txtVal-${listNo}`);
+    var isDeleted = spanElem.querySelector('del');
+    var ckb = editableElem.querySelector(`#ckb-${listNo}`)
+    console.log(ckb);
+
+    if(isDeleted){
+      spanElem.innerHTML = spanElem.innerText;
+      ckb.style.color="black";
+    }
+    else{
+      var delElem = document.createElement('del')
+      delElem.textContent = spanElem.textContent;
+      spanElem.innerHTML = '';
+      spanElem.appendChild(delElem)
+      ckb.style.color="blue";
+    }
+  }
+</script>
+</html>
